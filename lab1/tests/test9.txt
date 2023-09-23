@@ -1,0 +1,3 @@
+variables = x, y, z, a, b, c
+(f(x) ::= g(x))
+(g(x) ::= h(x))

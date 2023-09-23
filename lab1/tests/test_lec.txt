@@ -1,0 +1,5 @@
+variables = x, y 
+
+(f(g(x,y)) ::= g(h(y), x))
+
+(h(f(x)) ::= f(x))
