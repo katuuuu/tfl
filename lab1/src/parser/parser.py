@@ -89,12 +89,14 @@ class Parser:
     def _parse_constructor(self) -> Constructor:
         name = self._parse_name()
         args = []
+        is_variable_flag = True
         if self.cur_type == LP:
+            is_variable_flag = False
             self._check_and_shift(LP)
             args = self._parse_args()
             self._check_and_shift(RP)
 
-        c = Constructor(name, args)
+        c = Constructor(name, args, is_variable_flag)
         return c
 
     

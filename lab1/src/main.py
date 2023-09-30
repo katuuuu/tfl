@@ -52,7 +52,7 @@ def check_sat(rules: list[Rule], variables:set[str], debug=False):
     TrsChecker(variables, rules).check()
 
     # переводим TRS в линейные функции0
-    linsp_trs = LinspTranslator.trs_to_linsp(rules)
+    linsp_trs = LinspTranslator.trs_to_linsp(rules, variables)
     if debug:
         debug_print(linsp_trs, 'TRS linear approx:')
 
@@ -98,8 +98,12 @@ if __name__ == '__main__':
             files = os.listdir(args.filedir)
             for file in sorted(files):
                 rules, variables = Parser(str(os.path.join(args.filedir, file))).lexemize().parse()  
-                res = check_sat(rules, variables)
-                print('#TEST {:s}: {:s}'.format(file, res))
+                print('#TEST {:s}:'.format(file), end=' ')
+                try:
+                    res = check_sat(rules, variables)
+                    print('{:s}'.format(res))
+                except AssertionError as e:
+                    print(e)
 
         case 'one-file':
             print(check_sat(*Parser(args.filedir).lexemize().parse(), debug=True))

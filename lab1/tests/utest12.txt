@@ -1,2 +1,2 @@
 variables = x, y, z, a, b, c
-(f(a,b,c) ::= g(a,b,d))
+(x ::= x)

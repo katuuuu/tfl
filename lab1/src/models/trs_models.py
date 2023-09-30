@@ -5,15 +5,13 @@ from dataclasses import dataclass
 class Constructor:
     name: str
     args: list[Constructor]
+    is_variable: bool = False
 
     def __len__(self):
         return len(self.args)
 
     def __repr__(self):
         return self.name + ( '(' + ', '.join(map(repr, self.args))+ ')' if self.args else '')
-
-    def is_variable(self):
-        return self.__len__() == 0
 
 
 class Rule:

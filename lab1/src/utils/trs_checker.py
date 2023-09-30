@@ -25,10 +25,11 @@ class TrsChecker:
             self.check_constructor(r.rhs)
 
     def check_constructor(self, c: Constructor):
-        if c.name in self.variables:
-            assert len(c) == 0
+        if c.is_variable:
+            assert c.name in self.variables, f'переменная {c.name} не объявлена'
             return
 
+        assert c.name not in self.variables, f'переменная {c.name} используется как функция'
         if c.name not in self.arity:
             self.arity[c.name] = len(c)
         else:

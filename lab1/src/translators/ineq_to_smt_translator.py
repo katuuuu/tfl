@@ -11,11 +11,13 @@ from models.linsp_models import Param
 @dataclass
 class SmtIneq:
     sign: str
-    lhs: list[str]
-    rhs: list[str]
+    lhs: list[list[str]]
+    rhs: list[list[str]]
 
     def smt2_str(self):
-        return f'({self.sign} (* {" ".join(self.lhs)}) (* {" ".join(self.rhs)}))'
+        r1 = [f'(* {" ".join(pl)})' for pl in self.lhs]
+        r2 = [f'(* {" ".join(pl)})' for pl in self.rhs]
+        return f'({self.sign} (+ {" ".join(r1)}) (+ {" ".join(r2)}))'
 
 
 @dataclass
@@ -54,14 +56,13 @@ class SmtTranslator:
         )))
 
         params = filter(lambda x: x not in {Param.zero(), Param.one()}, params)
-
         return set([p.repr2() for p in params])
     
     def ineq_to_smt(self, ineq: Ineq) -> SmtIneq:
         return SmtIneq(
             ineq.sign_str(), 
-            [p.repr2() for p in ineq.lhs], 
-            [p.repr2() for p in ineq.rhs])
+            [[p.repr2() for p in pl] for pl in ineq.lhs], 
+            [[p.repr2() for p in pl] for pl in ineq.rhs])
 
     def ineq_sys_to_smt(self, system: IneqSystem, name) -> SmtIneqSystem:
         return SmtIneqSystem(
@@ -112,7 +113,10 @@ class SmtTranslator:
 
         res += '; монотонность (точнее строгое возрастание) по каждому аргументу\n\n'
         for x in self.params:
-            res += f'(assert (> {x} 0)) \n'
+            # чтобы не падали
+            # x -> f(x)
+            # и f(x) -> f(f(x))
+            res += f'(assert (> {x} 1)) \n'
         res += '\n'
 
         res += '; вычисление систем\n\n'
