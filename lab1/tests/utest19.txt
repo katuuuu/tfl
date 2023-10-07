@@ -1,0 +1,2 @@
+variables = x, y, z, a, b, c
+(f(x) ::= g(f(x)))
