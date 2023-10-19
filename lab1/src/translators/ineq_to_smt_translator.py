@@ -5,7 +5,6 @@ from pprint import pp
 
 from models.ineq_models import Ineq, IneqSort
 from models.ineq_models import IneqSystem, IneqSystemSort
-from models.linsp_models import Param
 
 
 @dataclass
@@ -35,33 +34,26 @@ class SmtTwinSystem:
 
 class SmtTranslator:
     systems_counter: int = 0
-    params: set[str]
+    params_linked: set[str]
+    params_free: set[str]
     twin_systems: list[SmtTwinSystem]
-    
+
     def use_counter(self) -> str:
-        self.systems_counter+=1
+        self.systems_counter += 1
         return str(self.systems_counter)
 
-    def extract_params(self, twin_systems: list[tuple[IneqSystem, IneqSystem]]) -> set[str]:
-        systems = [x[0] for x in twin_systems]
+    def extract_params(self, arity: dict[str, int]) -> dict[str, set[str]]:
+        self.params_linked = set()
+        self.params_free = set()
+        for fname, ar in arity.items():
+            self.params_linked.update(
+                set([f'{fname}{i}' for i in range(1, ar+1)]))
+            self.params_free.add(f'{fname}{ar+1}')
 
-        ineqs = itertools.chain.from_iterable(map(
-            methodcaller('get_all_ineqs'), 
-            systems
-        ))
-
-        params = set(itertools.chain.from_iterable(map(
-            methodcaller('get_all_params'), 
-            ineqs
-        )))
-
-        params = filter(lambda x: x not in {Param.zero(), Param.one()}, params)
-        return set([p.repr2() for p in params])
-    
     def ineq_to_smt(self, ineq: Ineq) -> SmtIneq:
         return SmtIneq(
-            ineq.sign_str(), 
-            [[p.repr2() for p in pl] for pl in ineq.lhs], 
+            ineq.sign_str(),
+            [[p.repr2() for p in pl] for pl in ineq.lhs],
             [[p.repr2() for p in pl] for pl in ineq.rhs])
 
     def ineq_sys_to_smt(self, system: IneqSystem, name) -> SmtIneqSystem:
@@ -70,13 +62,17 @@ class SmtTranslator:
             [self.ineq_to_smt(ineq) for ineq in system.get_all_ineqs()]
         )
 
-    def build_smt_repr(self, twin_systems: list[tuple[IneqSystem, IneqSystem]]):
-        # смотрим, какие есть коэффициенты в уравнениях 
-        self.params = self.extract_params(twin_systems)
+    def build_smt_repr(
+            self,
+            twin_systems: list[tuple[IneqSystem, IneqSystem]],
+            arity: dict[str, int]):
+
+        # смотрим, какие есть коэффициенты в уравнениях
+        self.extract_params(arity)
 
         twins_in_smt = []
         for ts in twin_systems:
-            base_name = f'sys{self.use_counter()}' 
+            base_name = f'sys{self.use_counter()}'
             sys1 = self.ineq_sys_to_smt(ts[0], f'{base_name}_e')
             sys2 = self.ineq_sys_to_smt(ts[1], f'{base_name}_var')
             twins_in_smt.append(SmtTwinSystem(base_name, sys1, sys2))
@@ -100,23 +96,22 @@ class SmtTranslator:
         res += '(set-logic QF_NIA)\n\n'
         res += '; объявления коэффициентов линейных функций\n\n'
 
-        for x in self.params:
+        for x in self.params_linked | self.params_free:
             res += f'(declare-fun {x} () Int) \n'
 
         res += '\n'
         res += '; объявления систем\n\n'
         for x in self.twin_systems:
-            res +=f'(declare-fun {x.name} () Bool)\n'
-            res +=f'(declare-fun {x.sys1.name} () Bool)\n'
-            res +=f'(declare-fun {x.sys2.name} () Bool)\n'
+            res += f'(declare-fun {x.name} () Bool)\n'
+            res += f'(declare-fun {x.sys1.name} () Bool)\n'
+            res += f'(declare-fun {x.sys2.name} () Bool)\n'
         res += '\n'
 
         res += '; монотонность (точнее строгое возрастание) по каждому аргументу\n\n'
-        for x in self.params:
-            # чтобы не падали
-            # x -> f(x)
-            # и f(x) -> f(f(x))
-            res += f'(assert (> {x} 1)) \n'
+        for x in self.params_linked:
+            res += f'(assert (>= {x} 1)) \n'
+        for x in self.params_free:
+            res += f'(assert (>= {x} 0)) \n'
         res += '\n'
 
         res += '; вычисление систем\n\n'
@@ -124,7 +119,7 @@ class SmtTranslator:
             for s in [x.sys1, x.sys2]:
                 res += f'(assert (= '
                 res += s.name + '\n'
-                res += ident1 + '(and' 
+                res += ident1 + '(and'
                 for ineq in s.ineqs:
                     res += '\n' + ident2 + ineq.smt2_str()
                 # res += '\n'

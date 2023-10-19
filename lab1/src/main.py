@@ -49,7 +49,7 @@ def check_sat(rules: list[Rule], variables:set[str], debug=False):
         debug_print(rules,'TRS parsed:')
     
     # проверяем корректность TRS
-    TrsChecker(variables, rules).check()
+    arity = TrsChecker(variables, rules).check()
 
     # переводим TRS в линейные функции0
     linsp_trs = LinspTranslator.trs_to_linsp(rules, variables)
@@ -63,7 +63,7 @@ def check_sat(rules: list[Rule], variables:set[str], debug=False):
         debug_print(ineqs, 'Twin ineq systems:')
 
     # транслируем в SMT2
-    smt_translator = SmtTranslator().build_smt_repr(ineqs)
+    smt_translator = SmtTranslator().build_smt_repr(ineqs, arity)
     if debug:
         smt_translator.print_smt2()
 

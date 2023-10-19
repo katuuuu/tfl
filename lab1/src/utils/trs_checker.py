@@ -23,6 +23,7 @@ class TrsChecker:
         for r in self.rules:
             self.check_constructor(r.lhs)
             self.check_constructor(r.rhs)
+        return self.arity
 
     def check_constructor(self, c: Constructor):
         if c.is_variable:
