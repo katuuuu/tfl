@@ -134,4 +134,3 @@ class SmtTranslator:
 
         res += '(check-sat)'
         return res
-

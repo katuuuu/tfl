@@ -56,6 +56,9 @@ class Factor:
 
     def mult_by_param(self, p: Param):
         return Factor([p] + self.coefs, self.variable)
+    
+    def is_zero(self):
+        return Param.zero() in self.coefs
 
 
 @dataclass
@@ -89,19 +92,11 @@ class LinComb:
     def empty_lin_comb():
         return LinComb([])
 
-    def regularize(self):
-        # берем все переменные из этой линейной комбинации
-        fset = set(map(lambda x: x.variable, self.factors))
-        # группируем по переменным
-        d : dict[Variable, list[Param]] = dict((f, []) for f in fset)
-        for factor in self.factors:
-            d[factor.variable] += factor.coefs
-        self.factors = [Factor(coefs, variable) for variable, coefs in d.items()]
-        return self
-
-    def to_dict(self):
-        self.regularize()
-        return dict(
-            (f.variable, f.coefs)
+    def to_dict(self) -> dict[Variable, list[list[Param]]]:
+        d = dict(
+            (f.variable, [])
             for f in self.factors
         )
+        for f in self.factors:
+            d[f.variable].append(f.coefs)
+        return d

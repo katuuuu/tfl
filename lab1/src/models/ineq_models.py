@@ -11,8 +11,8 @@ IneqSystemSort = IntEnum('IneqSystemSort', ['NONE', 'BY_E', 'BY_VARS'])
 
 @dataclass
 class Ineq:
-    lhs: list[Param]
-    rhs: list[Param]
+    lhs: list[list[Param]]
+    rhs: list[list[Param]]
     sort: IneqSort
     
     def __repr__(self):
@@ -35,7 +35,8 @@ class Ineq:
         return sorted_ineq
 
     def get_all_params(self):
-        return self.lhs + self.rhs
+        a = [l for ls in self.lhs for l in ls] + [l for ls in self.rhs for l in ls]
+        return a
 
 
 @dataclass

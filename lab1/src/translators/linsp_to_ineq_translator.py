@@ -32,10 +32,10 @@ class IneqTranslator:
             ineq_sys.add(Ineq(d1[coef], d2[coef], IneqSort.NONE))
         for coef in only_left:
             # с нулевым коэффициентом справа
-            ineq_sys.add(Ineq(d1[coef], [Param.zero()], IneqSort.NONE)) 
+            ineq_sys.add(Ineq(d1[coef], [[Param.zero()]], IneqSort.NONE)) 
         for coef in only_right:
             # с нулевым коэффициентом слева
-            ineq_sys.add(Ineq([Param.zero()], d2[coef], IneqSort.NONE)) 
+            ineq_sys.add(Ineq([[Param.zero()]], d2[coef], IneqSort.NONE)) 
         # свободные члены отдельно
         ineq_sys.set_e(
             Ineq(d1[Variable.identity()], d2[Variable.identity()], IneqSort.NONE)
