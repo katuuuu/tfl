@@ -1,0 +1,4 @@
+установка:
+pip install -r requirements.txt
+запуск:
+python main.py
