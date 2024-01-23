@@ -1,0 +1,3 @@
+(xy,yx)
+(yz,zy)
+(zx,xz)
