@@ -11,7 +11,6 @@ def generate_equations(dominos, M, N):
                 letter_counts[letter] = 0
             letter_counts[letter] += M[i] * (left.count(letter) - right.count(letter))
 
-    # Уравнение для каждой буквы
     for letter, count in letter_counts.items():
         equations.append(count == 0)
 
@@ -22,8 +21,6 @@ def generate_equations(dominos, M, N):
                 equations.append(N[i][j] <= M[i])
                 equations.append(N[i][j] <= M[j])
 
-    # Краевое домино
-    # Ni,j для первого и последнего домино равна 1
     equations.append(Sum([N[0][j] for j in range(len(dominos))]) == 1)
     equations.append(Sum([N[i][len(dominos) - 1] for i in range(len(dominos))]) == 1)
 
