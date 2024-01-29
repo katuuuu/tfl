@@ -1,6 +1,3 @@
-"""
-Main файл
-"""
 import sys
 
 from settings import G_FILE, W_FILE, G_VERBOSE, DEFAULT_G_FILE, DEFAULT_W_FILE, OUTPUT_TO_FILE, OUTPUT_FILE
