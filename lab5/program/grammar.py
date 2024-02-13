@@ -3,7 +3,6 @@ import sys
 import re
 import os
 
-# GRAMMAR.CPP
 class Grammar:
     def __init__(self,filename:str):
         self.rules = []
