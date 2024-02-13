@@ -1,4 +1,3 @@
-# FOREST.H
 
 import copy
 import sys
