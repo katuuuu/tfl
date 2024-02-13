@@ -219,14 +219,12 @@ class SLRTable:
 
         processed = {}
         c = 0
-        #print(this.extended_grammar_rules)
         for rule in this.extended_grammar_rules:
             tmp_rule = copy.deepcopy(rule)
             if DOT in tmp_rule.RHS:
                 tmp_rule.RHS.remove(DOT)
             processed[c] = tmp_rule
             c += 1
-        #print(this.extended_grammar_rules[0].RHS)
         added_rule = this.extended_grammar_rules[0].LHS + " -> " + this.extended_grammar_rules[0].RHS[1]
         rules = this.input_grammar.Rules()
         rules.insert(0, added_rule)
@@ -358,12 +356,10 @@ class SLRTable:
         this.newStartToken=""
         this.stateCount=0
         this.processGrammar()
-        #print(this.extended_grammar_rules)
         tmp=[]
         I0=this.findClosure(tmp,this.new_start_token)
         this.state_dict[0]=I0
-        this.generateStates()
-        #print(this.extended_grammar_rules)
+        this.generateStates())
         this.createParseTable()
         pass
     pass
