@@ -39,7 +39,6 @@ class LRParser:
         self.next_step()
 
         while True:
-            # Reduce stage
             self.just_created = []
             while len(self.reduce_stack) != 0:
                 reduce = self.reduce_stack.pop()
@@ -91,7 +90,6 @@ class LRParser:
                     self.update(top, self.token)
                 self.next_step()
 
-            # Check stage
             if len(self.accepted) != 0:
                 if self.target_step == LAST_TRACE:
                     make_screen()
