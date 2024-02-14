@@ -12,7 +12,7 @@ screenshot = parser.add_mutually_exclusive_group()
 screenshot.add_argument("-s", "--step", dest="step",help="specify the screen step.", type=int)
 screenshot.add_argument("-a", "--all",dest="all",action = "store_true",help=("enable full parse trace."))
 screenshot.add_argument("-l", "--last",dest="last",action="store_true",help=("only last screen."))
-### PARSING
+
 out=parser.parse_args(["-g", "grammars\\arith_grammar.txt", "-a", "-i", "id * id = id"])
 #out = parser.parse_args(input().split())
 #out=parser.parse_args(sys.argv[1:])
