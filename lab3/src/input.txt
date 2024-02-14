@@ -1,0 +1,6 @@
+alphabet
+g h i
+regex
+^g*h*i*$
+maxlength
+5
