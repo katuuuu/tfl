@@ -359,7 +359,7 @@ class SLRTable:
         tmp=[]
         I0=this.findClosure(tmp,this.new_start_token)
         this.state_dict[0]=I0
-        this.generateStates())
+        this.generateStates()
         this.createParseTable()
         pass
     pass
