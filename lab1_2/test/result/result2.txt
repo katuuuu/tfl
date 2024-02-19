@@ -1,0 +1,9 @@
+Число вхождений каждого домино:
+['cat', 'dog']: 9
+['apple', 'banana']: 9
+['orange', 'apple']: 0
+
+Число соседств между домино:
+['cat', 'dog'] и ['apple', 'banana']: 9
+['cat', 'dog'] и ['orange', 'apple']: 0
+['apple', 'banana'] и ['orange', 'apple']: 0

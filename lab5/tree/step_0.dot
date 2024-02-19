@@ -1,0 +1,12 @@
+digraph {
+label="sentence: 
+node [shape=circle];
+compound=true;
+rank1 [style = invis];
+{
+rank = same;
+node [shape=box];
+rank1 
+ [style = invis];
+}
+}

@@ -1,0 +1,2 @@
+digraph {nrankdir=RLnlabel="next token: " + self.token + "\npos: 3
+node [shape=box]n}n
