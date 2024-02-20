@@ -1,1 +1,0 @@
-(epsa(a*b+ba)*|epsa(a*b+ba)*a*b+ba)*(a*b+b|a*b+baa*b+b)*a(a*b+ba)*a*b+beps

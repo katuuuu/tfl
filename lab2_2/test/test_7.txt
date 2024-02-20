@@ -1,6 +1,0 @@
-Q Q1 Q2 QQ
-Q a -> QQ
-QQ ab -> Q1
-QQ b -> Q2
-Q1 aa -> QQ
-QQ ab -> Q1

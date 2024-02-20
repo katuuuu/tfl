@@ -1,8 +1,0 @@
-Q Q1 Q2 Q3 QQ QQ1 QQ2
-Q a(a*b+ba)* -> QQ
-QQ a -> Q1
-QQ a*b+ba -> QQ
-Q1 a -> QQ
-QQ b -> Q1
-QQ a*b+b -> QQ1
-QQ1 a(a*b+ba)*a*b+b -> QQ2

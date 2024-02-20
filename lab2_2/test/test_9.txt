@@ -1,6 +1,0 @@
-Q Q1 Q2 QQ
-Q a(a*b) -> QQ
-QQ a -> Q1
-QQ a*b+b -> Q2
-Q1 a -> QQ
-QQ b+ab -> Q1
