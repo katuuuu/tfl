@@ -1,5 +1,5 @@
 digraph {
-label="sentence: 
+label="sentence: "
 node [shape=circle];
 compound=true;
 rank1 [style = invis];

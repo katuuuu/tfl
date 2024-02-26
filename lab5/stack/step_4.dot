@@ -1,8 +1,10 @@
 digraph {
 rankdir=RL
-label="next token: *\npos: 1"
+label="next token: id\npos: 2"
 node [shape=box]
-"1366272553680"[xlabel="shift(7)\n", shape=ellipse]
+"1366272548496"[xlabel="shift(5)\n", shape=ellipse]
+"1366272548496" [label=<7 (*<SUB>0</SUB>)>]
+"1366272548496" -> "1366272553680"
 "1366272553680" [label=<2 (T<SUB>0</SUB>)>]
 "1366272553680" -> "1366272548304"
 "1366272548304" [label=<0 (<SUB>0</SUB>)>]

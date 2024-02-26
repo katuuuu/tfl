@@ -3,6 +3,7 @@ import sys
 import re
 import os
 
+# GRAMMAR.CPP
 class Grammar:
     def __init__(self,filename:str):
         self.rules = []
@@ -44,6 +45,8 @@ class ExtendedRule:
     def __init__(self,LHS:str="",RHS:list=[]):
         self.LHS=LHS
         self.RHS=RHS
+    def __eq__(self, value):
+        return self.__dict__ == value.__dict__
 
 class Actions:
     def __init__(self,shiftActions=[],reduceActions=[],is_acc=False):

@@ -7,10 +7,7 @@ FULL_TRACE = -1
 
 
 
-class Path:
-    def __init__(self, vertices: List[parse_vertex_sp], base_nodes: Set[gss_node_sp]):
-        self.vertices = vertices
-        self.base_nodes = base_nodes
+
 
 
 class LRParser:
@@ -39,20 +36,25 @@ class LRParser:
         self.next_step()
 
         while True:
+            # Reduce stage
             self.just_created = []
             while len(self.reduce_stack) != 0:
                 reduce = self.reduce_stack.pop()
                 rule = reduce[1]
                 paths = gss_node.look(reduce[0], len(rule.RHS))
                 for path in paths:
-                    p_vertex = parse_vertex.get_vertex(
+                    p_vertex = parse_vertex.get_vertex2(
                         path.vertices, rule.LHS, self.parse_vertex_count.get(rule.LHS, 0))
                     for pv in path.vertices:
-                        self.stubs.extract(pv)
+                        if pv in self.stubs:
+                            self.stubs.remove(pv)
                     base_nodes = path.base_nodes
                     goto_partition = {}
                     for node in base_nodes:
-                        goto_partition[self.table.GoTo(node.state, rule.LHS)].add(node)
+                        value=self.table.GoTo(node.state, rule.LHS)
+                        if value not in goto_partition:
+                            goto_partition[value]=set()
+                        goto_partition[value].add(node)
                     is_parse_vertex_created = False
                     for s, s_part in goto_partition.items():
                         amb_flag = False
@@ -65,11 +67,13 @@ class LRParser:
                         if amb_flag:
                             continue
                         is_parse_vertex_created = True
-                        node = gss_node.get_node(s_part, s, p_vertex)
+                        node = gss_node.get_node2(s_part, s, p_vertex)
                         self.stubs.add(p_vertex)
                         self.just_created.append(node)
                         self.update(node, in_list[self.pos])
                         if is_parse_vertex_created:
+                            if rule.LHS not in self.parse_vertex_count:
+                                self.parse_vertex_count[rule.LHS] = 0
                             self.parse_vertex_count[rule.LHS] += 1
                     self.next_step()
             if len(self.shift_map) != 0:
@@ -90,6 +94,7 @@ class LRParser:
                     self.update(top, self.token)
                 self.next_step()
 
+            # Check stage
             if len(self.accepted) != 0:
                 if self.target_step == LAST_TRACE:
                     make_screen()
@@ -102,10 +107,10 @@ class LRParser:
 
 
     def stack_to_graph(self, out):
-        out.write("digraph {n")
-        out.write("rankdir=RLn")
-        out.write("label=\"next token: \" + self.token + \"\\npos: " + str(self.pos) + "\n")
-        out.write("node [shape=box]n")
+        out.write("digraph {\n")
+        out.write("rankdir=RL\n")
+        out.write("label=\"next token: " + self.token + "\\npos: " + str(self.pos) + "\"\n")
+        out.write("node [shape=box]\n")
 
         tops = {}
         visited = set()
@@ -113,20 +118,20 @@ class LRParser:
         for i in range(len(self.reduce_stack)):
             reduce = self.reduce_stack[i]
             node, rule = reduce
-            tops[node] = tops.get(node, "") + "reduce(" + rule.LHS + " -> " + ' '.join(rule.RHS) + ")n"
+            tops[node] = tops.get(node, "") + "reduce(" + rule.LHS + " -> " + ' '.join(rule.RHS) + ")\\n"
 
         for shift_state, shift_nodes in self.shift_map.items():
             for node in shift_nodes:
-                tops[node] = tops.get(node, "") + "shift(" + str(shift_state) + ")n"
+                tops[node] = tops.get(node, "") + "shift(" + str(shift_state) + ")\\n"
 
         for node in self.accepted:
             tops[node] = "acc"
 
         for node, xlabel in tops.items():
-            out.write(""" + str(node) + """ + "[xlabel="" + xlabel + "", shape=ellipse]n")
+            out.write("\"" + str(id(node)) + "\"" + "[xlabel=\"" + xlabel + "\", shape=ellipse]\n")
             self.stack_to_graph_dfs(node, out, visited)
 
-        out.write("}n")
+        out.write("}\n")
 
     def make_screen(self):
         stack_name = "stack/step_" + str(self.step) + ".dot"
@@ -148,7 +153,7 @@ class LRParser:
         self.pos = 0
         self.step = 0
         self.parse_vertex_count = {}
-        self.reduce_stack = {}
+        self.reduce_stack = []
         self.shift_map = {}
         self.just_created = {}
         self.accepted = {}
@@ -168,10 +173,10 @@ class LRParser:
 
     def stack_to_graph_dfs(self, t, out, visited):
         visited.add(t)
-        out.write("\"" + str(t) + "\" [label=<" + str(t.state) + " (" + t.parse_vertex.name + "<SUB>" + str(t.parse_vertex.index) + "</SUB>" + ")>]n")
+        out.write("\"" + str(id(t)) + "\" [label=<" + str(t.state) + " (" + t.parse_vertex.name + "<SUB>" + str(t.parse_vertex.index) + "</SUB>" + ")>]\n")
         
         for child in t.childs:
-            out.write("\"" + str(t) + "\" -> \"" + str(child) + "\n")
+            out.write("\"" + str(id(t)) + "\" -> \"" + str(id(child)) + "\"\n")
             
             if child not in visited:
                 self.stack_to_graph_dfs(child, out, visited)
@@ -181,7 +186,7 @@ class LRParser:
         out.write("label=\"sentence: ")
         for v in self.terminal_vertices:
             out.write(v.name + " ")
-        out.write("\n")
+        out.write("\"\n")
         out.write("node [shape=circle];\n")
         out.write("compound=true;\n")
         out.write("rank1 [style = invis];\n")

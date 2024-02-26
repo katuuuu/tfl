@@ -1,5 +1,5 @@
 digraph {
-label="sentence: id 
+label="sentence: id "
 node [shape=circle];
 compound=true;
 rank1 [style = invis];
@@ -7,8 +7,8 @@ rank1 [style = invis];
 rank = same;
 node [shape=box];
 rank1 
- -> "<forest.parse_vertex object at 0x000001FBEDE03690>_1"
+ -> "1366271612752_1"
  [style = invis];
 }
-"<forest.parse_vertex object at 0x000001FBEDE03690>_1"[label = <id<SUB>0</SUB>>];
+"1366271612752_1"[label = <id<SUB>0</SUB>>];
 }

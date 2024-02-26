@@ -1,8 +1,10 @@
+# FOREST.H
 
 import copy
 import sys
 import re
 import os
+from typing import *
 
 class parse_vertex:
     def __init__(self, path=None, name=None, index=0):
@@ -11,7 +13,7 @@ class parse_vertex:
         self.index = index
 
     @staticmethod
-    def get_vertex(path, name, index):
+    def get_vertex2(path, name, index):
         return parse_vertex(path, name, index)
 
     @staticmethod

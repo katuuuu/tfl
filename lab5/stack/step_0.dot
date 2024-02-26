@@ -1,2 +1,7 @@
-digraph {nrankdir=RLnlabel="next token: " + self.token + "\npos: 0
-node [shape=box]n + str(node) + [xlabel= + xlabel + , shape=ellipse]n"<gss.gss_node object at 0x000001FBEDE02E90>" [label=<0 (<SUB>0</SUB>)>]n}n
+digraph {
+rankdir=RL
+label="next token: id\npos: 0"
+node [shape=box]
+"1366272548304"[xlabel="shift(5)\n", shape=ellipse]
+"1366272548304" [label=<0 (<SUB>0</SUB>)>]
+}

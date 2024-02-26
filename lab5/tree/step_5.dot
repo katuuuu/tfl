@@ -1,5 +1,5 @@
 digraph {
-label="sentence: id "
+label="sentence: id * id "
 node [shape=circle];
 compound=true;
 rank1 [style = invis];
@@ -8,6 +8,8 @@ rank = same;
 node [shape=box];
 rank1 
  -> "1366271612752_1"
+ -> "1366272521104_1"
+ -> "1366272553616_1"
  [style = invis];
 }
 "1366272549904_1"[label = <T<SUB>0</SUB>>];
@@ -15,4 +17,6 @@ rank1
 "1366272553488_1"[label = <F<SUB>0</SUB>>];
 "1366272553488_1" -> "1366271612752_1"
 "1366271612752_1"[label = <id<SUB>0</SUB>>];
+"1366272553616_1"[label = <id<SUB>1</SUB>>];
+"1366272521104_1"[label = <*<SUB>0</SUB>>];
 }
