@@ -1,0 +1,6 @@
+alphabet
+a b c d e f d g
+regex
+^a*b*cd*de*f*g*$
+maxlength
+7

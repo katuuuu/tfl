@@ -1,6 +1,6 @@
 alphabet
-g h i
+a b c d
 regex
-^g*h*i*$
+^a*cb*abcd$
 maxlength
 5

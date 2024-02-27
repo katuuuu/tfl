@@ -1,0 +1,6 @@
+alphabet
+d e f d g i o p
+regex
+^d*ef*g*i*p$
+maxlength
+20

@@ -1,0 +1,6 @@
+alphabet
+z c v b
+regex
+^b*v*vc*z$
+maxlength
+12
