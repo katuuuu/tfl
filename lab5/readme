@@ -15,7 +15,6 @@
 В грамматике поддерживается использование '|' (или)
 
 Запуск программы:
-- `py .\program\lab5.py ...`
 - `python .\program\lab5.py ...`
 
 Аргументы программы (весь список можно получить через флаг -h)
@@ -24,9 +23,17 @@
 - `-f` `--file` путь к файлу с предложением на вход парсера
 
 Пример запуска:
-py .\program\lab5.py -g grammars/arith_grammar.txt -i "id * id + id" -a
+python .\program\lab5.py -g grammars/arith_grammar.txt -i "id * id + id" -a
 Для чтения файла arith_grammar.txt на Linux нужно в файле lab5.py заменить в 16 строке в пути к файлу обратные слеши на обычные.
 
 Выходные данные:
 В папках stack и tree выводятся описания на языке dot, для преобразования их в картинки необходимо выполнить эту команду для Windows:
 mkdir stack/images | forfiles /P stack /m "*.dot" /c "cmd /c dot -Tpng @file -o images/@fname.png"
+Или можно посмотреть результат работы программы в онлайн graphviz: https://dreampuf.github.io/GraphvizOnline/
+
+В правой панели будет отображаться результат:
+Для дерева разбора это текущее состояние парсера ("sentence") и само дерево разбора
+Для стека это текущая операция, номер символа и сам стек парсера
+
+Пример для "id * id":
+![Снимок](https://github.com/katuuuu/tfl/assets/108438812/2b0ea529-d3dc-4d96-8c77-2e7165113c32)
